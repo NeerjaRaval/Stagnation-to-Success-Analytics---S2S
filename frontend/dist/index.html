@@ -5,6 +5,19 @@
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>frontend</title>
+    <script>
+      // Signal to Streamlit parent window that this component is ready
+      // and set the frame height to prevent loading timeouts
+      function notifyStreamlit() {
+        window.parent.postMessage({type: "streamlit:componentReady", apiVersion: 1}, "*");
+        window.parent.postMessage({type: "streamlit:setFrameHeight", height: 950}, "*");
+      }
+      // Notify immediately and on DOM load
+      notifyStreamlit();
+      window.addEventListener("DOMContentLoaded", notifyStreamlit);
+      // Periodic fallback to ensure height and status are updated
+      setInterval(notifyStreamlit, 1000);
+    </script>
     <script type="module" crossorigin src="./assets/index-DTWoqJQa.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-Cmnfdx6C.css">
   </head>
