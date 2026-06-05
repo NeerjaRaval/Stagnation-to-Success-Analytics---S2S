@@ -1,0 +1,199 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: dark;
+  color: #f1f5f9;
+  background-color: #050811;
+
+  /* Palo Alto Dark Theme & Color Palette */
+  --bg-main: #050811;
+  --bg-card: #0b111e;
+  --bg-sidebar: #070a14;
+  --border-glass: rgba(255, 255, 255, 0.05);
+  
+  --primary: #0082f0;       /* Neon Blue */
+  --primary-hover: #0266bc;
+  --accent: #06b6d4;        /* Cyan */
+  --purple: #8b5cf6;        /* Neon Purple */
+  --orange: #f97316;        /* Neon Orange */
+  
+  --success: #10b981;       /* Emerald */
+  --warning: #f59e0b;       /* Amber */
+  --danger: #ef4444;        /* Red */
+  
+  --text-primary: #ffffff;
+  --text-secondary: #94a3b8;
+  --text-muted: #475569;
+  
+  --glow-primary: 0 0 15px rgba(0, 130, 240, 0.2);
+  --glow-accent: 0 0 15px rgba(6, 182, 212, 0.2);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: radial-gradient(circle at 60% 0%, #0d162a 0%, #050811 75%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(5, 8, 17, 0.5);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 130, 240, 0.2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 130, 240, 0.5);
+}
+
+/* Custom Utilities */
+.glass-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.4);
+}
+
+.glass-panel-interactive:hover {
+  border-color: rgba(0, 130, 240, 0.25);
+  box-shadow: 0 8px 30px 0 rgba(0, 130, 240, 0.08);
+  transform: translateY(-1px);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-accent {
+  background: linear-gradient(135deg, #0082f0 0%, #06b6d4 50%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.badge-success {
+  background: rgba(16, 185, 129, 0.1);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.badge-danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.badge-primary {
+  background: rgba(0, 130, 240, 0.1);
+  color: #60a5fa;
+  border: 1px solid rgba(0, 130, 240, 0.25);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Custom inputs styling */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.05);
+  height: 5px;
+  border-radius: 3px;
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--primary);
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(0, 130, 240, 0.4);
+}
+
+select, input[type="text"], input[type="number"] {
+  border: 1px solid var(--border-glass);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-primary);
+  border-radius: 6px;
+  padding: 8px 12px;
+  outline: none;
+  font-family: inherit;
+  font-size: 0.82rem;
+  transition: all 0.2s ease;
+}
+select:focus, input[type="text"]:focus, input[type="number"]:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 10px rgba(0, 130, 240, 0.15);
+}
+select:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+select option {
+  background-color: #0b111e;
+  color: #ffffff;
+}
+

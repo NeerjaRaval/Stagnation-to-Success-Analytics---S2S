@@ -1,0 +1,32 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Models and serialization
+models/kmeans.pkl
+models/rf_model.pkl
+models/scaler_cluster.pkl
+models/scaler_classify.pkl
+models/encoders.pkl
+
+# Node / JS
+node_modules/
+dist/
+frontend/node_modules/
+frontend/dist/
+
+# OS files
+.DS_Store
+Thumbs.db
+~$*
+*.tmp
+
+# IDEs and editors
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

@@ -1,0 +1,46 @@
+[
+    {
+        "cluster": 0,
+        "persona": "High-Risk Stagnation Profile",
+        "description": "Stalled promotion gaps and role progression; showing high relative disengagement/attrition indicators.",
+        "avg_tenure": 5.431095406360424,
+        "avg_promotion_gap_ratio": 0.8201885079976953,
+        "avg_role_stagnation_index": 0.7770430197992035,
+        "avg_satisfaction": 2.8056537102473498,
+        "avg_monthly_income": 5687.424028268551,
+        "attrition_rate": 0.2049469964664311
+    },
+    {
+        "cluster": 1,
+        "persona": "Stable Long-Term Contributor",
+        "description": "Experienced employees with stable tenure, solid contributions, and normal progression.",
+        "avg_tenure": 5.543147208121828,
+        "avg_promotion_gap_ratio": 0.22362680325878295,
+        "avg_role_stagnation_index": 0.5741829025458467,
+        "avg_satisfaction": 2.720812182741117,
+        "avg_monthly_income": 5524.071065989848,
+        "attrition_rate": 0.18274111675126903
+    },
+    {
+        "cluster": 2,
+        "persona": "Fast-Track Performer",
+        "description": "Consistently promoted, stable high income growth, fast career velocity.",
+        "avg_tenure": 4.736705577172503,
+        "avg_promotion_gap_ratio": 0.0850199807398251,
+        "avg_role_stagnation_index": 0.5034637607079814,
+        "avg_satisfaction": 2.7263294422827498,
+        "avg_monthly_income": 5509.226977950713,
+        "attrition_rate": 0.15953307392996108
+    },
+    {
+        "cluster": 3,
+        "persona": "Stable Long-Term Contributor",
+        "description": "Experienced employees with stable tenure, solid contributions, and normal progression.",
+        "avg_tenure": 18.360730593607308,
+        "avg_promotion_gap_ratio": 0.3877730798678807,
+        "avg_role_stagnation_index": 0.5881075778541766,
+        "avg_satisfaction": 2.643835616438356,
+        "avg_monthly_income": 11935.671232876712,
+        "attrition_rate": 0.091324200913242
+    }
+]

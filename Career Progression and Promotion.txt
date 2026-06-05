@@ -1,0 +1,131 @@
+Career Progression and Promotion Gap Analysis for Retention Optimization at Palo Alto Networks
+Detailed guide and project requirements for the Career Progression and Promotion Gap Analysis for Retention Optimization at Palo Alto Networks analysis.
+
+Background and Context:
+Many employees leave not because of immediate dissatisfaction, but due to:
+• Long gaps between promotions
+• Stagnation in the same role
+• Limited skill growth or training
+• Weak managerial continuity
+
+Traditional attrition models flag who may leave, but they do not explain:
+What structural career issues are pushing employees toward that decision?
+This project addresses this gap by focusing on career trajectory intelligence
+
+Palo Alto Networks
+Problem Statement
+Palo Alto Networks currently lacks:
+• A data-driven view of career progression patterns
+• Identification of employees experiencing promotion stagnation
+• Early signals of retention opportunity, even before disengagement
+Without this, retention actions are often generic, not tailored to individual career needs.
+
+Dataset Fields Description:
+Field Name	Description
+Age	Age of the employee in years
+Attrition	Indicates whether the employee left the organization (0 / 1)
+BusinessTravel	Frequency of business travel (Non-Travel, Travel Rarely, Travel Frequently)
+DailyRate	Daily compensation rate of the employee
+Department	Department where the employee works (e.g., R&D, Sales, HR)
+DistanceFromHome	Distance between employee’s home and workplace
+Education	Education level (1:Below College, 2:College, 3:Bachelor, 4:Master, 5:Doctor)
+EducationField	Field of education (e.g., Life Sciences, Medical, Technical)
+EnvironmentSatisfaction	Satisfaction with the work environment (1 = Low, 4 = High)
+Gender	Gender of the employee (Male / Female)
+HourlyRate	Hourly wage of the employee
+JobInvolvement	Level of involvement in work (1 = Low, 4 = High)
+JobLevel	Job seniority level (1 = Entry level, higher values = senior roles)
+JobRole	Specific job role or designation of the employee
+JobSatisfaction	Satisfaction with the job role (1 = Low, 4 = High)
+MaritalStatus	Marital status of the employee (Single, Married, Divorced)
+MonthlyIncome	Monthly salary earned by the employee
+MonthlyRate	Monthly compensation rate (administrative pay metric)
+NumCompaniesWorked	Number of companies the employee has worked for previously
+OverTime	Indicates whether the employee works overtime (Yes / No)
+PercentSalaryHike	Percentage increase in salary during the last appraisal
+PerformanceRating	Performance evaluation score of the employee
+RelationshipSatisfaction	Satisfaction with workplace relationships (1 = Low, 4 = High)
+StockOptionLevel	Level of stock options granted to the employee
+TotalWorkingYears	Total professional experience across all companies (in years)
+TrainingTimesLastYear	Number of training programs attended in the last year
+WorkLifeBalance	Work-life balance rating (1 = Poor, 4 = Excellent)
+YearsAtCompany	Number of years the employee has worked at Palo Alto Networks
+YearsInCurrentRole	Number of years in the current role
+YearsSinceLastPromotion	Number of years since the last promotion
+YearsWithCurrManager	Number of years working with the current manager
+Data Science Methodology (Step-by-Step)
+Feature Engineering
+
+Create derived metrics such as:
+• Promotion Gap Ratio = YearsSinceLastPromotion / YearsAtCompany
+• Role Stagnation Index = YearsInCurrentRole / YearsAtCompany
+• Training Intensity Score = TrainingTimesLastYear / YearsAtCompany
+• Manager Stability Indicator
+
+Data Preprocessing
+• Normalize numerical career features
+• Encode categorical fields (department, role)
+• Remove extreme outliers (late-career edge cases)
+
+Career Path Clustering (Unsupervised Learning)
+• Apply clustering algorithms:
+● K-Means (primary) and Hierarchical clustering (validation)
+• Clusters may represent:
+● Fast-track performers
+● Stable long-term contributors and Early-career explorers
+● Promotion-stalled employees and High-risk stagnation profiles
+Cluster Interpretation & Labeling
+
+Each cluster is analyzed and labeled based on:
+• Promotion frequency
+• Role change velocity
+• Training participation
+• Manager continuity
+
+Promotion Gap Risk Scoring
+For each employee:
+• Assign a Promotion Gap Score (Low / Medium / High)
+• Combine cluster membership with stagnation indicators
+Retention Opportunity Identification
+
+Identify employees who:
+• Are not yet disengaged
+• Are not high attrition risk
+• But show career stagnation signals
+
+Key Performance Indicators (KPIs)
+KPI	Description
+Career Cluster	Employee career trajectory type
+Promotion Gap Score	Risk of stagnation
+Retention Opportunity Index	Intervention priority
+Training Need Indicator	Development planning
+Manager Stability Impact	Leadership insight
+Streamlit Web Application Requirements
+
+Dashboard Modules
+• Career Path Clustering Dashboard
+● Cluster distribution
+● Career pattern summaries
+• Promotion Gap Monitor
+● High-gap employee identification
+● Role-level stagnation insights
+• Retention Opportunity Panel
+● Employees needing career intervention
+● Suggested actions (training, rotation, promotion review)
+• Managerial Insight Dashboard
+● Manager tenure vs career growth
+● Team-level stagnation signals
+
+User Capabilities
+• Department & role filters
+• Career stage selector
+• Promotion gap threshold slider
+• Cluster explorer
+
+Deliverables and Submission
+• Research paper (EDA, insights, recommendations)
+• Streamlit dashboard (live analytics)
+• Executive summary for government stakeholders
+
+Conclusion
+This project introduces career intelligence as a retention strategy. Unlike which predicts who might leave, this project explains why employees may eventually disengage by uncovering promotion gaps and career stagnation patterns. By identifying retention opportunities early, Palo Alto Networks can move from reactive retention to proactive career-centric workforce management, making this project clearly distinct in prediction goal, methodology, and business value.
