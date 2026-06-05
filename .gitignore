@@ -4,11 +4,8 @@ __pycache__/
 *$py.class
 
 # Models and serialization
-models/kmeans.pkl
-models/rf_model.pkl
-models/scaler_cluster.pkl
-models/scaler_classify.pkl
-models/encoders.pkl
+# Checked in to support online Streamlit deployment
+# models/kmeans.pkl etc. are included
 
 # Node / JS
 node_modules/
