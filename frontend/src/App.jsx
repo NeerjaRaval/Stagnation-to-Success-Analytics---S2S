@@ -16,6 +16,7 @@ import Alerts from './pages/Alerts';
 import Interventions from './pages/Interventions';
 import Relationships from './pages/Relationships';
 import Tasks from './pages/Tasks';
+import { API_BASE } from './config';
 
 export default function App() {
   const [activePage, setActivePage] = useState('dashboard');
@@ -44,7 +45,7 @@ export default function App() {
   ];
 
   const fetchMetrics = () => {
-    fetch('http://localhost:8000/api/metrics')
+    fetch(`${API_BASE}/api/metrics`)
       .then(res => res.json())
       .then(data => {
         setMetrics(data);
@@ -56,14 +57,14 @@ export default function App() {
   useEffect(() => {
     fetchMetrics();
     // Fetch explainability assets
-    fetch('http://localhost:8000/api/explainability')
+    fetch(`${API_BASE}/api/explainability`)
       .then(res => res.json())
       .then(data => setExplainability(data))
       .catch(err => console.error("Error fetching explainability:", err));
   }, []);
 
   const handleUpdateSettings = (newSettings) => {
-    fetch('http://localhost:8000/api/settings', {
+    fetch(`${API_BASE}/api/settings`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newSettings)
@@ -80,7 +81,7 @@ export default function App() {
     setCopilotHistory(prev => [...prev, { role: 'user', text: queryText }]);
     setCopilotLoading(true);
     
-    fetch('http://localhost:8000/api/copilot', {
+    fetch(`${API_BASE}/api/copilot`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt: queryText })

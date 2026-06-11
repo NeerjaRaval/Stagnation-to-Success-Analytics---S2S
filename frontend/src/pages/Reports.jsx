@@ -1,8 +1,33 @@
 import React from 'react';
+import { API_BASE } from '../config';
 
 export default function Reports() {
-  const handleExport = (format) => {
-    alert(`Generating ${format} report bundle. Download will begin shortly.`);
+  const [isExporting, setIsExporting] = React.useState(false);
+
+  const handleExport = async (format) => {
+    if (format === 'PDF') {
+      setIsExporting(true);
+      try {
+        const response = await fetch(`${API_BASE}/api/reports/download`);
+        if (!response.ok) throw new Error('Failed to generate PDF report');
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'S2S_Executive_Report.pdf';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      } catch (err) {
+        console.error(err);
+        alert('Error downloading report. Make sure the backend API server is running.');
+      } finally {
+        setIsExporting(false);
+      }
+    } else {
+      alert(`Generating ${format} report bundle. Download will begin shortly.`);
+    }
   };
 
   return (
@@ -19,12 +44,13 @@ export default function Reports() {
         <div style={{ display: 'flex', gap: '10px' }}>
           <button 
             onClick={() => handleExport('PDF')}
+            disabled={isExporting}
             style={{
-              padding: '8px 16px', background: 'var(--primary)', border: 'none', 
-              borderRadius: '6px', color: '#fff', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem'
+              padding: '8px 16px', background: isExporting ? '#64748b' : 'var(--primary)', border: 'none', 
+              borderRadius: '6px', color: '#fff', cursor: isExporting ? 'not-allowed' : 'pointer', fontWeight: 600, fontSize: '0.8rem'
             }}
           >
-            Export PDF 📄
+            {isExporting ? 'Exporting... ⏳' : 'Export PDF 📄'}
           </button>
           <button 
             onClick={() => handleExport('CSV')}
@@ -37,6 +63,7 @@ export default function Reports() {
           </button>
         </div>
       </div>
+
 
       {/* Main Report Body */}
       <section style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '30px', alignItems: 'stretch' }}>

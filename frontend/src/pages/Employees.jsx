@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE } from '../config';
 
 export default function Employees({ presetRiskLevel, hideFilterBar }) {
   const [employees, setEmployees] = useState([]);
@@ -25,7 +26,7 @@ export default function Employees({ presetRiskLevel, hideFilterBar }) {
     
     // Construct request URL
     const queryRisk = presetRiskLevel || riskLevel;
-    const url = `http://localhost:8000/api/employees?page=${page}&limit=10&department=${encodeURIComponent(department)}&risk_level=${queryRisk}`;
+    const url = `${API_BASE}/api/employees?page=${page}&limit=10&department=${encodeURIComponent(department)}&risk_level=${queryRisk}`;
 
     fetch(url)
       .then(res => {
@@ -144,7 +145,7 @@ export default function Employees({ presetRiskLevel, hideFilterBar }) {
           color: '#f87171', fontSize: '0.88rem', display: 'flex', alignItems: 'center', gap: '10px'
         }}>
           <span>⚠️</span>
-          <span>Could not load employee telemetry data from localhost:8000. Error: {error}</span>
+          <span>Could not load employee telemetry data from the backend server. Error: {error}</span>
         </div>
       )}
 

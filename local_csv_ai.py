@@ -120,7 +120,7 @@ class LocalCSVAI:
             }
             
             prompt_enriched = f"""
-            You are Antigravity Career Progression Analyst for Palo Alto Networks.
+            You are an expert HR Career Analytics Specialist for Palo Alto Networks.
             Use these statistics from our employee dataset to answer the user's question.
             
             Dataset statistics:

@@ -4,3 +4,6 @@ numpy
 plotly
 scikit-learn
 statsmodels
+fastapi
+uvicorn
+fpdf2

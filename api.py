@@ -1,4 +1,5 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, BackgroundTasks
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import pandas as pd
@@ -314,4 +315,110 @@ def get_explainability():
     return {
         "personas": model_assets.get("cluster_profiles", []),
         "feature_importances": model_assets.get("feature_importances", [])[:10]
+    }
+
+def cleanup_file(path: str):
+    try:
+        if os.path.exists(path):
+            os.remove(path)
+    except Exception:
+        pass
+
+@app.get("/api/reports/download")
+def download_report(background_tasks: BackgroundTasks):
+    global df_processed
+    if df_processed is None:
+        load_assets()
+        
+    temp_pdf_path = "executive_report.pdf"
+    try:
+        from report_generator import generate_pdf_report
+        generate_pdf_report(df_processed, temp_pdf_path)
+        background_tasks.add_task(cleanup_file, temp_pdf_path)
+        return FileResponse(
+            path=temp_pdf_path,
+            filename="S2S_Executive_Report.pdf",
+            media_type="application/pdf"
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to generate report: {str(e)}")
+
+@app.get("/api/dei")
+def get_dei_metrics():
+    global df_processed
+    if df_processed is None:
+        load_assets()
+        
+    # Gender metrics
+    gender_groups = df_processed.groupby('Gender')
+    gender_counts = gender_groups.size().to_dict()
+    gender_gap = gender_groups['PromotionGapRatio'].mean().to_dict()
+    gender_stagnation = gender_groups['RoleStagnationIndex'].mean().to_dict()
+    gender_salary = gender_groups['MonthlyIncome'].mean().to_dict()
+    
+    # Calculate gender representation percentage
+    total = len(df_processed)
+    gender_dist = [
+        {"name": g, "value": int(count), "percentage": round((count / total) * 100, 1)}
+        for g, count in gender_counts.items()
+    ]
+    
+    # Calculate gender pay gap: (Male_avg - Female_avg) / Male_avg * 100
+    male_avg_sal = gender_salary.get('Male', 1.0)
+    female_avg_sal = gender_salary.get('Female', 1.0)
+    pay_gap = round(((male_avg_sal - female_avg_sal) / male_avg_sal) * 100, 2)
+    
+    # Age group metrics
+    def age_bucket(age):
+        if age < 25:
+            return "Under 25"
+        elif age <= 35:
+            return "25-35"
+        elif age <= 45:
+            return "36-45"
+        else:
+            return "46+"
+            
+    df_temp = df_processed.copy()
+    df_temp['AgeGroup'] = df_temp['Age'].apply(age_bucket)
+    age_groups = df_temp.groupby('AgeGroup')
+    
+    age_data = []
+    # Ensure ordered categories
+    for group_name in ["Under 25", "25-35", "36-45", "46+"]:
+        if group_name in age_groups.groups:
+            group_df = age_groups.get_group(group_name)
+            age_data.append({
+                "group": group_name,
+                "count": int(len(group_df)),
+                "avg_gap": round(float(group_df['PromotionGapRatio'].mean()) * 100, 1),
+                "avg_stagnation": round(float(group_df['RoleStagnationIndex'].mean()) * 100, 1)
+            })
+            
+    # Education Field metrics
+    edu_groups = df_processed.groupby('EducationField')
+    edu_data = []
+    for field, group_df in edu_groups:
+        edu_data.append({
+            "field": field,
+            "count": int(len(group_df)),
+            "avg_gap": round(float(group_df['PromotionGapRatio'].mean()) * 100, 1),
+            "avg_stagnation": round(float(group_df['RoleStagnationIndex'].mean()) * 100, 1)
+        })
+        
+    # DEI Equity Score: 100 - absolute difference in promotion gap ratio
+    female_gap = gender_gap.get('Female', 0.0)
+    male_gap = gender_gap.get('Male', 0.0)
+    promo_gap_diff = abs(female_gap - male_gap)
+    equity_score = round(100 - (promo_gap_diff * 100), 1)
+    
+    return {
+        "gender_distribution": gender_dist,
+        "gender_promotion_gaps": {k: round(v * 100, 1) for k, v in gender_gap.items()},
+        "gender_role_stagnation": {k: round(v * 100, 1) for k, v in gender_stagnation.items()},
+        "gender_salaries": {k: round(v, 2) for k, v in gender_salary.items()},
+        "pay_gap_percentage": pay_gap,
+        "age_distribution": age_data,
+        "education_distribution": edu_data,
+        "equity_score": equity_score
     }

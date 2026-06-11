@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE } from '../config';
 
 const CheckCircleIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--success)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -35,7 +36,7 @@ export default function Tasks({ metrics, onRefresh }) {
   useEffect(() => {
     // Ping API server to calculate response latency
     const start = performance.now();
-    fetch('http://localhost:8000/api/settings')
+    fetch(`${API_BASE}/api/settings`)
       .then(res => {
         if (res.ok) {
           setPingStatus('online');

@@ -113,6 +113,8 @@ const TasksIcon = () => (
 );
 
 export default function Layout({ children, activePage, setActivePage }) {
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: <DashboardIcon /> },
     { id: 'progression', label: 'Career Progression', icon: <ProgressionIcon /> },
@@ -130,11 +132,27 @@ export default function Layout({ children, activePage, setActivePage }) {
     { id: 'settings', label: 'Settings', icon: <SettingsIcon /> }
   ];
 
+  const closeSidebar = () => setSidebarOpen(false);
+  const handleNav = (id) => { setActivePage(id); closeSidebar(); };
+
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-main)' }}>
-      
+
+      {/* Hamburger button — visible on mobile only */}
+      <button className="hamburger-btn" onClick={() => setSidebarOpen(o => !o)} aria-label="Toggle menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+          {sidebarOpen
+            ? <><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>
+            : <><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></>
+          }
+        </svg>
+      </button>
+
+      {/* Dark overlay (mobile) */}
+      <div className={`sidebar-overlay${sidebarOpen ? ' open' : ''}`} onClick={closeSidebar} />
+
       {/* Sidebar Navigation */}
-      <aside style={{
+      <aside className={`s2s-sidebar${sidebarOpen ? ' open' : ''}`} style={{
         width: '260px',
         background: 'var(--bg-sidebar)',
         borderRight: '1px solid var(--border-glass)',
@@ -146,54 +164,37 @@ export default function Layout({ children, activePage, setActivePage }) {
         bottom: 0,
         zIndex: 100
       }}>
-        {/* Brand Header: Palo Alto Networks Logo */}
+        {/* Brand Header */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '36px', paddingLeft: '6px' }}>
-          {/* Palo Alto Red/Orange Emblem */}
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0 }}>
             <path d="M12 2L2 22h20L12 2z" fill="#f97316" />
             <path d="M12 6l-7 14h14l-7-14z" fill="#070a14" />
             <circle cx="12" cy="14" r="3" fill="#f97316" />
           </svg>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <span style={{ fontSize: '1rem', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
-              paloalto
-            </span>
-            <span style={{ fontSize: '0.64rem', color: 'var(--text-secondary)', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', lineHeight: 1 }}>
-              networks
-            </span>
+            <span style={{ fontSize: '1rem', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1 }}>paloalto</span>
+            <span style={{ fontSize: '0.64rem', color: 'var(--text-secondary)', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', lineHeight: 1 }}>networks</span>
           </div>
         </div>
 
         {/* Sidebar Links */}
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1, overflowY: 'auto', paddingRight: '4px' }} className="custom-scroll">
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1, overflowY: 'auto', paddingRight: '4px' }}>
           {menuItems.map(item => {
             const isActive = activePage === item.id;
             return (
               <button
                 key={item.id}
-                onClick={() => setActivePage(item.id)}
+                onClick={() => handleNav(item.id)}
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  padding: '10px 14px',
-                  borderRadius: '8px',
-                  border: 'none',
+                  display: 'flex', alignItems: 'center', gap: '12px',
+                  padding: '10px 14px', borderRadius: '8px', border: 'none',
                   background: isActive ? 'rgba(0, 130, 240, 0.12)' : 'transparent',
                   color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                  fontSize: '0.86rem',
-                  fontWeight: isActive ? 600 : 500,
-                  transition: 'all 0.2s',
-                  outline: 'none'
+                  cursor: 'pointer', textAlign: 'left', fontSize: '0.86rem',
+                  fontWeight: isActive ? 600 : 500, transition: 'all 0.2s', outline: 'none', width: '100%'
                 }}
-                onMouseOver={(e) => {
-                  if (!isActive) e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)';
-                }}
-                onMouseOut={(e) => {
-                  if (!isActive) e.currentTarget.style.background = 'transparent';
-                }}
+                onMouseOver={e => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.02)'; }}
+                onMouseOut={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
               >
                 {item.icon}
                 {item.label}
@@ -202,119 +203,72 @@ export default function Layout({ children, activePage, setActivePage }) {
           })}
         </nav>
 
-        {/* User Card Profile: Sarah Johnson */}
+        {/* User Card */}
         <div style={{
-          marginTop: 'auto',
-          padding: '12px',
-          borderRadius: '8px',
-          background: 'rgba(255, 255, 255, 0.02)',
-          border: '1px solid var(--border-glass)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px'
+          marginTop: 'auto', padding: '12px', borderRadius: '8px',
+          background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-glass)',
+          display: 'flex', alignItems: 'center', gap: '10px'
         }}>
           <div style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '50%',
+            width: '32px', height: '32px', borderRadius: '50%',
             background: 'linear-gradient(135deg, var(--purple) 0%, var(--accent) 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 700,
-            fontSize: '11px',
-            color: '#fff'
-          }}>
-            SJ
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <h4 style={{ fontSize: '0.8rem', fontWeight: 600, color: '#fff', lineHeight: 1.2 }}>Sarah Johnson</h4>
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontWeight: 700, fontSize: '11px', color: '#fff', flexShrink: 0
+          }}>SJ</div>
+          <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+            <h4 style={{ fontSize: '0.8rem', fontWeight: 600, color: '#fff', lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Sarah Johnson</h4>
             <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>HR Business Partner</span>
           </div>
-          {/* Professional caret SVG */}
-          <svg width="10" height="6" viewBox="0 0 10 6" fill="none" style={{ marginLeft: 'auto', opacity: 0.5 }}>
+          <svg width="10" height="6" viewBox="0 0 10 6" fill="none" style={{ marginLeft: 'auto', opacity: 0.5, flexShrink: 0 }}>
             <path d="M1 1l4 4 4-4" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
       </aside>
 
       {/* Main Container */}
-      <div style={{
-        flex: 1,
-        marginLeft: '260px',
-        padding: '30px 40px',
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '24px'
+      <div className="s2s-main" style={{
+        flex: 1, marginLeft: '260px', padding: '30px 40px',
+        minHeight: '100vh', display: 'flex', flexDirection: 'column', gap: '24px'
       }}>
-        {/* Title Header Banner */}
-        <header style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
-          borderBottom: '1px solid var(--border-glass)',
-          paddingBottom: '20px'
+        {/* Header Banner */}
+        <header className="s2s-header" style={{
+          display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
+          borderBottom: '1px solid var(--border-glass)', paddingBottom: '20px'
         }}>
-          <div>
-            <h1 style={{ fontSize: '1.45rem', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ minWidth: 0 }}>
+            <h1 style={{ fontSize: '1.45rem', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
               Career Progression and Promotion Gap Analysis
-              <span style={{ fontWeight: 400, color: 'var(--text-secondary)' }}>for Retention Optimization at</span>
-              {/* <span style={{ color: '#f97316' }}>Palo Alto Networks</span> */}
+              <span style={{ fontWeight: 400, color: 'var(--text-secondary)' }}>for Retention Optimization</span>
             </h1>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
               AI-Powered Workforce Intelligence Platform
             </p>
           </div>
 
-          {/* Top Bar Right side controls */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
-            {/* View Select */}
-            <select style={{
-              padding: '6px 12px', background: 'rgba(255,255,255,0.02)',
-              border: '1px solid var(--border-glass)', color: '#fff', borderRadius: '6px', fontSize: '0.78rem'
-            }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0, flexWrap: 'wrap' }}>
+            <select style={{ padding: '6px 12px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-glass)', color: '#fff', borderRadius: '6px', fontSize: '0.78rem' }}>
               <option>Global View</option>
               <option>R&D Department</option>
               <option>Sales Department</option>
             </select>
-
-            {/* Date Picker select */}
-            <select style={{
-              padding: '6px 12px', background: 'rgba(255,255,255,0.02)',
-              border: '1px solid var(--border-glass)', color: '#fff', borderRadius: '6px', fontSize: '0.78rem'
-            }}>
+            <select style={{ padding: '6px 12px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-glass)', color: '#fff', borderRadius: '6px', fontSize: '0.78rem' }}>
               <option>May 2023 - Apr 2024</option>
               <option>Q1 2024</option>
               <option>Full Year 2025</option>
             </select>
-
-            {/* Notifications */}
-            <div style={{
-              width: '32px', height: '32px', borderRadius: '6px', border: '1px solid var(--border-glass)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', position: 'relative'
-            }}>
-              {/* Professional bell SVG */}
+            <div style={{ width: '32px', height: '32px', borderRadius: '6px', border: '1px solid var(--border-glass)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', position: 'relative' }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" />
               </svg>
-              <span style={{
-                position: 'absolute', top: '4px', right: '4px', width: '6px', height: '6px',
-                borderRadius: '50%', background: 'var(--danger)'
-              }} />
+              <span style={{ position: 'absolute', top: '4px', right: '4px', width: '6px', height: '6px', borderRadius: '50%', background: 'var(--danger)' }} />
             </div>
-
-            {/* Small status indicator */}
-            <div style={{
-              padding: '6px 10px', borderRadius: '6px', background: 'rgba(16, 185, 129, 0.05)',
-              border: '1px solid rgba(16, 185, 129, 0.15)', fontSize: '0.72rem', color: '#34d399', fontWeight: 600
-            }}>
+            <div style={{ padding: '6px 10px', borderRadius: '6px', background: 'rgba(16,185,129,0.05)', border: '1px solid rgba(16,185,129,0.15)', fontSize: '0.72rem', color: '#34d399', fontWeight: 600 }}>
               core active
             </div>
           </div>
         </header>
 
-        {/* Dynamic Pages Mount here */}
+        {/* Dynamic Pages */}
         <main style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '24px' }}>
           {children}
         </main>
@@ -323,3 +277,4 @@ export default function Layout({ children, activePage, setActivePage }) {
     </div>
   );
 }
+
